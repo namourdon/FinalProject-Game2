@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\GemSpawn.cs" />
      <Compile Include="Assets\PlayerController.cs" />
      <Compile Include="Assets\Sprites\_Platerformer_Level_Kit\MoveCam.cs" />
  <Reference Include="UnityEngine.UI">
