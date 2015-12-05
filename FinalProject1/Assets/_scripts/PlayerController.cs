@@ -10,8 +10,10 @@ public class PlayerController : MonoBehaviour
     public Text lives;
     public int initialScore = 0;
     public int livesAmount = 5;
-   private Transform _transform;
+    private Transform _transform;
     private Vector2 newPosition = new Vector2(0.0f, 0.0f);
+    private AudioSource[] _AudioSources; //collection of the sources
+    private AudioSource _EnemyAudio, _GemAudio, _playerSound;
     void Start()
     {
        this._transform = gameObject.GetComponent<Transform>();
@@ -19,6 +21,9 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
+        this._AudioSources = this.GetComponents<AudioSource>();
+        this._EnemyAudio = this._AudioSources[0]; //reference enemy sound
+        this._GemAudio = this._AudioSources[1]; // refers to gem collect sound
         this._CheckMove();
     }
     private void _CheckMove()
@@ -46,12 +51,12 @@ public class PlayerController : MonoBehaviour
     {
         if (otherCollider.gameObject.CompareTag("gem"))
         {
-            //this._coinSound.Play();
+            this._GemAudio.Play();
             this.initialScore += 10;
         }
         if (otherCollider.gameObject.CompareTag("enemy"))
         {
-            // this._slimeSound.Play();
+            this._EnemyAudio.Play();
             this.livesAmount--;
             if (this.livesAmount <= 0)
             {

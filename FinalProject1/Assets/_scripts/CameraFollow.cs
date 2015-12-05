@@ -8,7 +8,7 @@ public class CameraFollow : MonoBehaviour {
     public float smoothTimeX;
 
     public GameObject player;
-
+   
     void Start()
     {
         //trouver le jouer
