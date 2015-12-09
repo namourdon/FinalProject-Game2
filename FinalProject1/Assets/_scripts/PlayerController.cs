@@ -2,61 +2,129 @@
 using System.Collections;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class HeightRange
+{
+    public float HMin, HMax;
+
+    public HeightRange(float HMin, float HMax)
+    {
+        this.HMin = HMin;
+        this.HMax = HMax;
+    }
+}
 public class PlayerController : MonoBehaviour
 {
-
-    public float mSpeed;
-    public Text score;
-    public Text lives;
+    //public variables
+    public float speed = 50f;
+    public float jump = 500f;
     public int initialScore = 0;
     public int livesAmount = 5;
+    public Text score;
+    public Text lives;
+    public Text gameOver;
+    public Text StartGame;
+    public Text levelUp;
+
+
+    public HeightRange heightRange = new HeightRange(300f, 1000f);
+    //Private variables
+    private AudioSource[] _audioSource;
+    private AudioSource _gemSound;
+    private AudioSource _enemySound;
+    private Rigidbody2D _rigidbody2D;
     private Transform _transform;
-    private Vector2 newPosition = new Vector2(0.0f, 0.0f);
-    private AudioSource[] _AudioSources; //collection of the sources
-    private AudioSource _EnemyAudio, _GemAudio, _playerSound;
+    private Animator _animator;
+    private float _moving = 0;
+    private bool _facingRight = true;
+    private bool _ground = true;
+
+    // Use this for initialization
     void Start()
     {
-       this._transform = gameObject.GetComponent<Transform>();
-
+        this._animator = gameObject.GetComponent<Animator>();
+        this._transform = gameObject.GetComponent<Transform>();
+        this._rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+        this._audioSource = gameObject.GetComponents<AudioSource>();
+        this._gemSound = this._audioSource[0];
+        this._enemySound = this._audioSource[1];
     }
+
+    void FixedUpdate()
+    {
+        float forceX = 0f;
+        float forceY = 0f;
+
+        float absVeliX = Mathf.Abs(this._rigidbody2D.velocity.x);
+        float absVeliY = Mathf.Abs(this._rigidbody2D.velocity.y);
+        this._moving = Input.GetAxis("Horizontal");
+
+        if (this._moving != 0)
+        {
+            //ont bouge
+            this._animator.SetInteger("AnimState", 1);
+            if (this._moving > 0)
+            {
+                //droit
+                if (absVeliX < this.heightRange.HMax)
+                {
+                    forceX = this.speed;
+                    this._facingRight = true;
+                    this._flip();
+                }
+
+            }
+            else if (this._moving < 0)
+            //gauche
+            {
+                if (absVeliX < this.heightRange.HMax)
+                {
+                    forceX = -this.speed;
+                    this._facingRight = false;
+                    this._flip();
+                }
+            }
+
+        }
+        else if (this._moving == 0)
+        // on bouge pas
+        {
+           this._animator.SetInteger("AnimState", 0);
+
+        }
+        //pour sauter
+        if (Input.GetKey("up") || Input.GetKey(KeyCode.W))
+        {
+
+            if (this._ground)
+            {
+
+                if (absVeliY < this.heightRange.HMax)
+                {
+                    forceY = this.jump;
+                    this._ground = false;
+
+                }
+            }
+        }
+
+        this._rigidbody2D.AddForce(new Vector2(forceX, forceY));
+    }
+    // Update is called once per frame
     void Update()
     {
-        this._AudioSources = this.GetComponents<AudioSource>();
-        this._EnemyAudio = this._AudioSources[0]; //reference enemy sound
-        this._GemAudio = this._AudioSources[1]; // refers to gem collect sound
-        this._CheckMove();
-    }
-    private void _CheckMove()
-    {
-        newPosition = gameObject.GetComponent<Transform>().position;
-
-
-        if (Input.GetAxis("Horizontal") > 0)
-        {
-            newPosition.x += this.mSpeed;
-            gameObject.GetComponent<Transform>().position = newPosition;
-            //this._facingRight = true;
-            //this._flip();
-        }
-            //if (Input.GetAxis("Horizontal") < 0)
-            //{
-            //    newPosition.x -= this.mSpeed;
-            //    gameObject.GetComponent<Transform>().position = newPosition;
-            //    //this._facingRight = false;
-            //    //this._flip();
-            //}
 
     }
     void OnCollisionEnter2D(Collision2D otherCollider)
     {
         if (otherCollider.gameObject.CompareTag("gem"))
         {
-            this._GemAudio.Play();
+            this._gemSound.Play();
             this.initialScore += 10;
         }
         if (otherCollider.gameObject.CompareTag("enemy"))
         {
-            this._EnemyAudio.Play();
+             this._enemySound.Play();
             this.livesAmount--;
             if (this.livesAmount <= 0)
             {
@@ -65,18 +133,26 @@ public class PlayerController : MonoBehaviour
 
 
         }
-        this.FinalScore();
-        /// private void _flip() {
-        //     if (this._facingRight)
-        //     {
-        //         this._transform.localScale = new Vector2(1f, 1f);
-        //     }
-        //     else
-        //     {
-        //         this._transform.localScale = new Vector2(-1f, 1f);
-        //     }
-        // }
 
+        this.FinalScore();
+    }
+    void OnCollisionStay2D(Collision2D otherCollider)
+    {
+        if (otherCollider.gameObject.CompareTag("ground"))
+        {
+            this._ground = true;
+        }
+    }
+    private void _flip()
+    {
+        if (this._facingRight)
+        {
+            this._transform.localScale = new Vector2(1f, 1f);
+        }
+        else
+        {
+            this._transform.localScale = new Vector2(-1f, 1f);
+        }
     }
     private void FinalScore()
     {
@@ -89,8 +165,8 @@ public class PlayerController : MonoBehaviour
         Destroy(gameObject);
         this.score.enabled = false;
         this.lives.enabled = false;
-        //this.gameOver.enabled = true;
-       // this.StartGame.enabled = true;
-        //this.StartGame.text = "Score: " + this.initialScore;
+        this.gameOver.enabled = true;
+        this.StartGame.enabled = true;
+        this.StartGame.text = "Score: " + this.initialScore;
     }
 }
