@@ -5,6 +5,9 @@ ehthumbs.db
 # Folder config file
 Desktop.ini
 
+#Folder to remove
+FinalProject1
+
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
