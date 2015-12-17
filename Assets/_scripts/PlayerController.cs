@@ -3,18 +3,20 @@ using System.Collections;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class HeightRange
+public class VelocityRange
 {
-    public float HMin, HMax;
+    public float vMin, vMax;
 
-    public HeightRange(float HMin, float HMax)
+    public VelocityRange(float vMin, float vMax)
     {
-        this.HMin = HMin;
-        this.HMax = HMax;
+        this.vMin = vMin;
+        this.vMax = vMax;
     }
 }
 public class PlayerController : MonoBehaviour
 {
+
+    
     //public variables
     public float speed = 50f;
     public float jump = 500f;
@@ -26,8 +28,10 @@ public class PlayerController : MonoBehaviour
     public Text StartGame;
     public Text levelUp;
 
+    
 
-    public HeightRange heightRange = new HeightRange(300f, 1000f);
+
+    public VelocityRange velocityRange = new VelocityRange(300f, 1000f);
     //Private variables
     private AudioSource[] _audioSource;
     private AudioSource _gemSound;
@@ -66,7 +70,7 @@ public class PlayerController : MonoBehaviour
             if (this._moving > 0)
             {
                 //droit
-                if (absVeliX < this.heightRange.HMax)
+                if (absVeliX < this.velocityRange.vMax)
                 {
                     forceX = this.speed;
                     this._facingRight = true;
@@ -77,7 +81,7 @@ public class PlayerController : MonoBehaviour
             else if (this._moving < 0)
             //gauche
             {
-                if (absVeliX < this.heightRange.HMax)
+                if (absVeliX < this.velocityRange.vMax)
                 {
                     forceX = -this.speed;
                     this._facingRight = false;
@@ -99,7 +103,7 @@ public class PlayerController : MonoBehaviour
             if (this._ground)
             {
 
-                if (absVeliY < this.heightRange.HMax)
+                if (absVeliY < this.velocityRange.vMax)
                 {
                     forceY = this.jump;
                     this._ground = false;
