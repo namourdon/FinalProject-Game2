@@ -119,6 +119,22 @@ public class PlayerController : MonoBehaviour
     {
 
     }
+    void onCollisionEnter2D(Collision2D other)
+    {
+        if (other.transform.tag == "platform")
+        {
+            transform.parent = other.transform;
+        }
+
+    }
+    void onCollisionExit2D(Collision2D other)
+    {
+        if (other.transform.tag == "platform")
+        {
+            transform.parent = null;
+        }
+
+    }
     void OnCollisionEnter2D(Collision2D otherCollider)
     {
         if (otherCollider.gameObject.CompareTag("gem"))
@@ -173,4 +189,6 @@ public class PlayerController : MonoBehaviour
         this.StartGame.enabled = true;
         this.StartGame.text = "Score: " + this.initialScore;
     }
+
+    
 }
