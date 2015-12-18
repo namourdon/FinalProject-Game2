@@ -49,22 +49,17 @@
      <Compile Include="Assets\_scripts\CameraFollow.cs" />
      <Compile Include="Assets\_scripts\EnemyMove.cs" />
      <Compile Include="Assets\_scripts\GemController.cs" />
+     <Compile Include="Assets\_scripts\LoadOnCLick.cs" />
      <Compile Include="Assets\_scripts\PlayerController.cs" />
      <Compile Include="Assets\_scripts\followPath.cs" />
      <Compile Include="Assets\_scripts\platformController.cs" />
      <None Include="Assets\Fonts\icebox_art\iceboxart.txt" />
      <None Include="Assets\Fonts\upheaval\upheaval.txt" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>
